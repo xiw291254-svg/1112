@@ -1,0 +1,1108 @@
+/* ==========================================================================
+   《星海之境 · 迴光之誓》 (Astral Sanctuary Visual Novel)
+   4 大夥伴攻略、24 重官方解謎答案秘卷、存讀檔系統與命運時空回溯樣式表
+   ========================================================================== */
+
+:root {
+  --bg-space: #060814;
+  --bg-panel: rgba(13, 18, 38, 0.84);
+  --bg-panel-solid: #0d1226;
+  --border-glow: rgba(255, 255, 255, 0.16);
+  --border-cyan: rgba(0, 240, 255, 0.5);
+  --border-purple: rgba(192, 132, 252, 0.5);
+  --border-gold: rgba(251, 191, 36, 0.5);
+  --border-crimson: rgba(244, 63, 94, 0.5);
+
+  --cyan-neon: #00f0ff;
+  --cyan-dim: rgba(0, 240, 255, 0.2);
+  --purple-neon: #c084fc;
+  --purple-dim: rgba(192, 132, 252, 0.2);
+  --gold-neon: #fbbf24;
+  --gold-dim: rgba(251, 191, 36, 0.2);
+  --crimson-neon: #f43f5e;
+  --emerald-neon: #10b981;
+
+  --text-main: #f8fafc;
+  --text-dim: #94a3b8;
+  --text-gold: #fde68a;
+
+  --font-serif: 'Cinzel', 'Noto Serif TC', serif;
+  --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+html, body.vn-body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--bg-space);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+}
+
+/* ================= 背景星空與極光 ================= */
+#vn-particle-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+#ambient-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.scene-vignette {
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 140px rgba(0, 0, 0, 0.85);
+  pointer-events: none;
+}
+
+.scene-aurora {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.35;
+  pointer-events: none;
+  animation: auroraDrift 16s ease-in-out infinite alternate;
+}
+
+.aurora-1 {
+  width: 700px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(0, 240, 255, 0.4) 0%, transparent 70%);
+  top: -150px;
+  left: 20%;
+}
+
+.aurora-2 {
+  width: 800px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.35) 0%, transparent 70%);
+  bottom: -200px;
+  right: 10%;
+  animation-duration: 22s;
+  animation-delay: -6s;
+}
+
+@keyframes auroraDrift {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(60px, 30px) scale(1.2); }
+  100% { transform: translate(-40px, -20px) scale(0.95); }
+}
+
+/* ================= 頂部 HUD 狀態列 ================= */
+.vn-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 62px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(6, 8, 20, 0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-glow);
+  z-index: 50;
+}
+
+.header-left .vn-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logo-crest {
+  font-size: 22px;
+  color: var(--cyan-neon);
+  filter: drop-shadow(0 0 10px var(--cyan-neon));
+}
+
+.logo-titles {
+  display: flex;
+  flex-direction: column;
+}
+
+.main-title {
+  font-family: var(--font-serif);
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  background: linear-gradient(135deg, #ffffff 30%, var(--cyan-neon) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.sub-title {
+  font-size: 8.5px;
+  letter-spacing: 1px;
+  color: var(--text-dim);
+}
+
+/* 6 大場景切換指示條 */
+.scene-quick-nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(13, 18, 38, 0.7);
+  padding: 3px 8px;
+  border-radius: 18px;
+  border: 1px solid var(--border-glow);
+}
+
+.nav-pill {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-dim);
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  transition: all 0.25s ease;
+}
+
+.nav-pill:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.nav-pill.active {
+  color: #fff;
+  background: rgba(0, 240, 255, 0.2);
+  border-color: var(--cyan-neon);
+  box-shadow: 0 0 10px var(--cyan-dim);
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 4 夥伴好感度看板 */
+.companion-bonds-dock {
+  display: flex;
+  gap: 4px;
+  background: rgba(13, 18, 38, 0.85);
+  border: 1px solid var(--border-glow);
+  padding: 3px 6px;
+  border-radius: 16px;
+}
+
+.bond-pill {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.bond-luna { color: #c084fc; background: rgba(192, 132, 252, 0.15); }
+.bond-seris { color: #fbbf24; background: rgba(251, 191, 36, 0.15); }
+.bond-elena { color: #f43f5e; background: rgba(244, 63, 94, 0.15); }
+.bond-mira { color: #38bdf8; background: rgba(56, 189, 248, 0.15); }
+
+.hud-btn {
+  background: rgba(13, 18, 38, 0.75);
+  border: 1px solid var(--border-glow);
+  color: var(--text-main);
+  padding: 4px 10px;
+  border-radius: 14px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.25s ease;
+}
+
+.hud-btn:hover {
+  background: rgba(30, 41, 59, 0.95);
+  border-color: var(--cyan-neon);
+  color: var(--cyan-neon);
+  box-shadow: 0 0 10px var(--cyan-dim);
+  transform: translateY(-2px);
+}
+
+.hud-btn.highlight-gold {
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.2) 0%, rgba(244, 63, 94, 0.2) 100%);
+  border-color: var(--gold-neon);
+  color: var(--gold-neon);
+  box-shadow: 0 0 12px var(--gold-dim);
+}
+
+.hud-btn.highlight-gold:hover {
+  background: linear-gradient(135deg, var(--gold-neon) 0%, #f43f5e 100%);
+  color: #fff;
+}
+
+.hud-btn.icon-only {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+/* ================= 視覺劇場視窗 (Stage) ================= */
+.vn-stage {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 62px - 85px);
+  margin-top: 62px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  z-index: 10;
+}
+
+/* ================= 左右邊框箭頭切換按鈕 (核心要求) ================= */
+.scene-nav-arrow {
+  position: absolute;
+  top: 46%;
+  transform: translateY(-50%);
+  z-index: 40;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  transition: var(--ease-spring);
+  outline: none;
+}
+
+.arrow-left { left: 16px; }
+.arrow-right { right: 16px; }
+
+.arrow-container {
+  position: relative;
+  width: 72px;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 0 16px rgba(0, 0, 0, 0.7));
+  transition: transform 0.4s var(--ease-spring);
+}
+
+.arrow-svg { width: 100%; height: 100%; overflow: visible; }
+
+.left-arrow-glow .arrow-bg { fill: rgba(6, 8, 20, 0.85); }
+.left-arrow-glow .arrow-border {
+  fill: none; stroke: url(#vn-grad-left); stroke-width: 2.8; filter: url(#vn-glow-l); stroke-linejoin: round;
+}
+.left-arrow-glow .arrow-core {
+  fill: var(--cyan-neon); opacity: 0.85; filter: drop-shadow(0 0 10px var(--cyan-neon));
+  animation: pulseArrowCoreLeft 2.4s ease-in-out infinite alternate;
+}
+
+.right-arrow-glow .arrow-bg { fill: rgba(6, 8, 20, 0.85); }
+.right-arrow-glow .arrow-border {
+  fill: none; stroke: url(#vn-grad-right); stroke-width: 2.8; filter: url(#vn-glow-r); stroke-linejoin: round;
+}
+.right-arrow-glow .arrow-core {
+  fill: var(--purple-neon); opacity: 0.85; filter: drop-shadow(0 0 10px var(--purple-neon));
+  animation: pulseArrowCoreRight 2.4s ease-in-out infinite alternate;
+}
+
+@keyframes pulseArrowCoreLeft {
+  0% { transform: scale(0.9); opacity: 0.6; filter: drop-shadow(0 0 4px var(--cyan-neon)); }
+  100% { transform: scale(1.2); opacity: 1; filter: drop-shadow(0 0 18px var(--cyan-neon)); }
+}
+
+@keyframes pulseArrowCoreRight {
+  0% { transform: scale(0.9); opacity: 0.6; filter: drop-shadow(0 0 4px var(--purple-neon)); }
+  100% { transform: scale(1.2); opacity: 1; filter: drop-shadow(0 0 18px var(--purple-neon)); }
+}
+
+.arrow-label {
+  position: absolute;
+  bottom: -28px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--text-dim);
+  white-space: nowrap;
+  background: rgba(6, 8, 20, 0.92);
+  padding: 3px 10px;
+  border-radius: 12px;
+  border: 1px solid var(--border-glow);
+  opacity: 0.8;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.arrow-left:hover .arrow-container { transform: translateX(-8px) scale(1.12); }
+.arrow-right:hover .arrow-container { transform: translateX(8px) scale(1.12); }
+.arrow-left:hover .arrow-label, .arrow-right:hover .arrow-label {
+  opacity: 1; color: #fff; border-color: var(--cyan-neon); box-shadow: 0 0 14px var(--cyan-dim);
+}
+
+.arrow-pulse {
+  position: absolute;
+  inset: -12px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 240, 255, 0.35);
+  pointer-events: none;
+  opacity: 0;
+  animation: arrowRipple 3s cubic-bezier(0.1, 0.8, 0.3, 1) infinite;
+}
+
+@keyframes arrowRipple {
+  0% { transform: scale(0.6); opacity: 0.85; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+/* ================= 6 大美術場景層 ================= */
+.scene-artwork-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.scene-layer {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.8s ease, transform 0.8s ease;
+  transform: scale(1.05);
+}
+
+.scene-layer.active {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
+}
+
+.scene-bg-art {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.library-art { background: radial-gradient(circle at 50% 35%, #1e1b4b 0%, #090a1a 80%, #03040c 100%); }
+.garden-art { background: radial-gradient(circle at 50% 40%, #064e3b 0%, #042f2e 40%, #06101e 85%); }
+.clocktower-art { background: radial-gradient(circle at 50% 45%, #451a03 0%, #1c1917 50%, #09090b 90%); }
+.observatory-art { background: radial-gradient(circle at 50% 30%, #1e1b4b 0%, #0f172a 60%, #020617 100%); }
+.foundry-art { background: radial-gradient(circle at 50% 40%, #581c87 0%, #1e1b4b 50%, #050510 100%); }
+.shrine-art { background: radial-gradient(circle at 50% 30%, #312e81 0%, #0f172a 60%, #020617 100%); }
+
+.telescope-silhouette { position: absolute; top: 30%; left: 30%; font-size: 80px; opacity: 0.5; }
+.magic-forge-glow { position: absolute; top: 35%; left: 50%; transform: translate(-50%, -50%); font-size: 90px; color: var(--cyan-neon); }
+
+/* ================= 互動熱點層 ================= */
+.hotspots-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 25;
+}
+
+.hotspot-interactive-node {
+  position: absolute;
+  pointer-events: auto;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform: translate(-50%, -50%);
+  transition: transform 0.3s var(--ease-spring);
+}
+
+.hotspot-interactive-node:hover { transform: translate(-50%, -50%) scale(1.22); }
+
+.hotspot-orb {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: rgba(13, 18, 38, 0.9);
+  border: 2px solid var(--cyan-neon);
+  box-shadow: 0 0 16px var(--cyan-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  position: relative;
+}
+
+.hotspot-orb.solved { border-color: var(--emerald-neon); box-shadow: 0 0 16px rgba(16, 185, 129, 0.4); }
+
+.hotspot-sparkle-ring {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 1.5px dashed var(--gold-neon);
+  animation: spinGear 8s linear infinite;
+}
+
+@keyframes spinGear {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.hotspot-title-tag {
+  margin-top: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+  background: rgba(6, 8, 20, 0.9);
+  padding: 2px 8px;
+  border-radius: 10px;
+  border: 1px solid var(--border-glow);
+  white-space: nowrap;
+}
+
+/* ================= 4 角色動態立繪層 ================= */
+.character-sprite-layer {
+  position: absolute;
+  bottom: 0;
+  right: 12%;
+  width: 360px;
+  height: 500px;
+  pointer-events: none;
+  z-index: 20;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  transition: all 0.5s ease;
+}
+
+.sprite-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  animation: spriteBreathe 4s ease-in-out infinite alternate;
+}
+
+@keyframes spriteBreathe {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-8px); }
+}
+
+.sprite-silhouette-glow {
+  position: absolute;
+  width: 260px;
+  height: 380px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(192, 132, 252, 0.4) 0%, transparent 70%);
+  filter: blur(40px);
+  bottom: 30px;
+}
+
+.anime-portrait-frame {
+  position: relative;
+  width: 240px;
+  height: 350px;
+  border-radius: 120px 120px 20px 20px;
+  background: linear-gradient(180deg, rgba(238, 242, 255, 0.95) 0%, rgba(192, 132, 252, 0.85) 60%, rgba(99, 102, 241, 0.75) 100%);
+  box-shadow: 0 0 35px rgba(192, 132, 252, 0.5), inset 0 0 25px rgba(255, 255, 255, 0.6);
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.portrait-halo {
+  position: absolute;
+  top: 20px;
+  width: 110px;
+  height: 22px;
+  border: 2px solid var(--gold-neon);
+  border-radius: 50%;
+  box-shadow: 0 0 14px var(--gold-neon);
+}
+
+.portrait-hair {
+  position: absolute;
+  top: 45px;
+  width: 150px;
+  height: 130px;
+  border-radius: 50% 50% 30% 30%;
+  background: linear-gradient(180deg, #e0e7ff 0%, #c7d2fe 100%);
+}
+
+.portrait-eyes {
+  position: absolute;
+  top: 120px;
+  width: 80px;
+  height: 18px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.portrait-eyes::before, .portrait-eyes::after {
+  content: '';
+  width: 20px;
+  height: 16px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #38bdf8 30%, #1e1b4b 100%);
+  box-shadow: 0 0 8px #38bdf8;
+  animation: eyeBlink 4.5s infinite;
+}
+
+@keyframes eyeBlink {
+  0%, 96%, 100% { transform: scaleY(1); }
+  98% { transform: scaleY(0.1); }
+}
+
+.portrait-expression {
+  position: absolute;
+  top: 160px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #4338ca;
+  background: rgba(255, 255, 255, 0.7);
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.portrait-role-badge {
+  position: absolute;
+  bottom: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+  background: rgba(6, 8, 20, 0.8);
+  padding: 3px 10px;
+  border-radius: 12px;
+  border: 1px solid var(--border-glow);
+}
+
+.character-name-floating {
+  margin-top: 6px;
+  font-family: var(--font-serif);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: var(--purple-neon);
+  text-shadow: 0 0 12px var(--purple-neon);
+}
+
+/* 4 角色主題樣式 */
+.sprite-luna .sprite-silhouette-glow { background: radial-gradient(circle, rgba(192, 132, 252, 0.4) 0%, transparent 70%); }
+.sprite-luna .anime-portrait-frame { background: linear-gradient(180deg, #f3e8ff 0%, #c084fc 60%, #6b21a8 100%); }
+.sprite-luna .character-name-floating { color: var(--purple-neon); }
+
+.sprite-seris .sprite-silhouette-glow { background: radial-gradient(circle, rgba(251, 191, 36, 0.4) 0%, transparent 70%); }
+.sprite-seris .anime-portrait-frame { background: linear-gradient(180deg, #fef3c7 0%, #fbbf24 60%, #b45309 100%); }
+.sprite-seris .character-name-floating { color: var(--gold-neon); }
+
+.sprite-elena .sprite-silhouette-glow { background: radial-gradient(circle, rgba(244, 63, 94, 0.4) 0%, transparent 70%); }
+.sprite-elena .anime-portrait-frame { background: linear-gradient(180deg, #ffe4e6 0%, #f43f5e 60%, #881337 100%); }
+.sprite-elena .character-name-floating { color: var(--crimson-neon); }
+
+.sprite-mira .sprite-silhouette-glow { background: radial-gradient(circle, rgba(56, 189, 248, 0.4) 0%, transparent 70%); }
+.sprite-mira .anime-portrait-frame { background: linear-gradient(180deg, #e0f2fe 0%, #38bdf8 60%, #0369a1 100%); }
+.sprite-mira .character-name-floating { color: var(--cyan-neon); }
+
+/* ================= 對話與選擇支 ================= */
+.dialogue-dock-container {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 92%;
+  max-width: 980px;
+  z-index: 35;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.choice-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+}
+
+.choice-btn {
+  width: 80%;
+  max-width: 580px;
+  background: rgba(13, 18, 38, 0.92);
+  backdrop-filter: blur(16px);
+  border: 1.5px solid var(--border-purple);
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.3s ease;
+}
+
+.choice-btn:hover {
+  background: rgba(30, 41, 59, 0.95);
+  border-color: var(--cyan-neon);
+  color: var(--cyan-neon);
+  transform: scale(1.02);
+}
+
+.dialogue-box {
+  background: var(--bg-panel);
+  backdrop-filter: blur(24px);
+  border: 1.5px solid var(--border-glow);
+  border-radius: 18px;
+  padding: 16px 24px;
+  cursor: pointer;
+  min-height: 125px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.dialogue-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.dialogue-controls-mini {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-fast-forward {
+  background: rgba(0, 240, 255, 0.15);
+  border: 1px solid var(--border-cyan);
+  color: var(--cyan-neon);
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-fast-forward:hover {
+  background: var(--cyan-neon);
+  color: #000;
+  box-shadow: 0 0 10px var(--cyan-dim);
+}
+
+.text-speed-hint {
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+.speaker-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(6, 8, 20, 0.85);
+  border: 1px solid var(--border-purple);
+  padding: 3px 12px;
+  border-radius: 12px;
+}
+
+.speaker-title {
+  font-family: var(--font-serif);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--purple-neon);
+}
+
+.dialogue-text {
+  font-size: 15px;
+  color: var(--text-main);
+  line-height: 1.6;
+}
+
+.dialogue-next-indicator {
+  font-size: 11px;
+  color: var(--cyan-neon);
+  animation: bounceDown 1.2s infinite;
+}
+
+@keyframes bounceDown {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(4px); }
+}
+
+/* ================= 底部道具探索欄 ================= */
+.vn-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 85px;
+  background: rgba(6, 8, 20, 0.85);
+  backdrop-filter: blur(16px);
+  border-top: 1px solid var(--border-glow);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 20px;
+}
+
+.inventory-dock-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.inv-badge { font-size: 12px; font-weight: 700; color: var(--gold-neon); }
+.inv-slots-row { display: flex; gap: 10px; }
+
+.inv-cell {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  background: rgba(13, 18, 38, 0.8);
+  border: 1.5px solid var(--border-glow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.inv-cell:not(.empty) {
+  border-color: var(--cyan-neon);
+  box-shadow: 0 0 12px var(--cyan-dim);
+}
+
+.inv-cell:not(.empty):hover { transform: translateY(-4px) scale(1.1); border-color: #fff; }
+.inv-helper-text { font-size: 11px; color: var(--text-dim); }
+
+/* ================= 官方答案秘卷視窗 (Cheat Sheet Modal) ================= */
+.cheat-sheet-card {
+  max-width: 820px;
+  width: 94%;
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.cheat-sheet-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+  max-height: 520px;
+  padding-right: 8px;
+  margin-top: 14px;
+}
+
+.cheat-item-box {
+  background: rgba(6, 8, 20, 0.75);
+  border: 1px solid var(--border-glow);
+  border-radius: 14px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.cheat-item-box.solved {
+  border-color: var(--emerald-neon);
+  background: rgba(16, 185, 129, 0.08);
+}
+
+.cheat-left-info {
+  flex: 1;
+}
+
+.cheat-puzzle-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 3px;
+}
+
+.cheat-scene-badge {
+  font-size: 10px;
+  color: var(--cyan-neon);
+  margin-bottom: 4px;
+}
+
+.cheat-solution-text {
+  font-size: 12px;
+  color: var(--text-gold);
+  line-height: 1.5;
+}
+
+.btn-auto-solve {
+  background: linear-gradient(135deg, var(--gold-neon) 0%, #f43f5e 100%);
+  border: none;
+  color: #fff;
+  padding: 6px 14px;
+  border-radius: 14px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.btn-auto-solve:hover {
+  transform: scale(1.06);
+  box-shadow: 0 0 14px rgba(251, 191, 36, 0.6);
+}
+
+/* ================= 存讀檔視窗 (Save & Load Modal) ================= */
+.save-load-card {
+  max-width: 760px;
+}
+
+.save-slots-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.save-slot-item {
+  background: rgba(6, 8, 20, 0.85);
+  border: 1.5px solid var(--border-glow);
+  border-radius: 16px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.save-slot-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.save-slot-meta {
+  font-size: 11px;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+
+.save-slot-bonds {
+  display: flex;
+  gap: 6px;
+  font-size: 10px;
+  color: var(--text-gold);
+}
+
+.save-slot-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+/* ================= 命運時空回溯 (Timeline Rewind Modal) ================= */
+.timeline-card {
+  max-width: 720px;
+}
+
+.timeline-nodes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 420px;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+.timeline-node-item {
+  background: rgba(6, 8, 20, 0.75);
+  border-left: 4px solid var(--cyan-neon);
+  border-radius: 0 14px 14px 0;
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.node-info h4 { font-size: 14px; color: #fff; margin-bottom: 2px; }
+.node-info p { font-size: 11px; color: var(--text-dim); }
+
+/* ================= 終章 4 夥伴結局評價 ================= */
+.ending-companions-eval {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.companion-eval-card {
+  background: rgba(6, 8, 20, 0.85);
+  border: 1px solid var(--border-glow);
+  border-radius: 14px;
+  padding: 10px 14px;
+}
+
+.companion-eval-card.bonded {
+  border-color: var(--gold-neon);
+  background: rgba(251, 191, 36, 0.1);
+}
+
+.companion-eval-card.parted {
+  border-color: var(--crimson-neon);
+  background: rgba(244, 63, 94, 0.1);
+}
+
+.eval-name { font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 2px; }
+.eval-status { font-size: 11px; font-weight: 600; }
+.eval-status.bonded { color: var(--gold-neon); }
+.eval-status.parted { color: #fb7185; }
+
+/* 24 解謎小遊戲通用彈窗 */
+.puzzle-modal-card { max-width: 680px; width: 92%; padding: 24px 28px; }
+.puzzle-modal-header { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+.puzzle-badge-icon { font-size: 32px; filter: drop-shadow(0 0 12px var(--cyan-neon)); }
+.puzzle-modal-header h2 { font-family: var(--font-serif); font-size: 20px; color: #fff; }
+.pm-type-tag { font-size: 11px; color: var(--cyan-neon); font-weight: 600; }
+.pm-description { font-size: 13px; color: var(--text-dim); margin-bottom: 16px; line-height: 1.5; }
+
+.puzzle-interactive-stage {
+  min-height: 190px;
+  background: rgba(6, 8, 20, 0.8);
+  border: 1px solid var(--border-glow);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.puzzle-modal-footer { display: flex; justify-content: space-between; align-items: center; }
+
+/* 小遊戲元件樣式 */
+.dial-row { display: flex; gap: 20px; }
+.dial-item { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.dial-circle {
+  width: 80px; height: 80px; border-radius: 50%; border: 2px solid var(--cyan-neon);
+  background: radial-gradient(circle, rgba(13, 18, 38, 0.9) 0%, #050711 100%);
+  display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: #fff;
+  cursor: pointer; box-shadow: 0 0 14px var(--cyan-dim); transition: transform 0.3s var(--ease-spring);
+}
+.dial-circle:hover { transform: scale(1.08); }
+
+.rune-buttons-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.rune-btn-slot {
+  width: 65px; height: 65px; border-radius: 14px; background: rgba(13, 18, 38, 0.9);
+  border: 2px solid var(--border-purple); font-size: 26px; color: var(--purple-neon);
+  display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s ease;
+}
+.rune-btn-slot:hover { border-color: #fff; transform: translateY(-3px); }
+
+.chime-flowers-row { display: flex; gap: 16px; }
+.chime-btn {
+  width: 58px; height: 75px; border-radius: 16px;
+  background: linear-gradient(180deg, rgba(16, 185, 129, 0.2) 0%, rgba(13, 18, 38, 0.9) 100%);
+  border: 2px solid var(--emerald-neon); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; cursor: pointer;
+}
+.chime-btn:hover { transform: translateY(-6px); box-shadow: 0 0 20px rgba(16, 185, 129, 0.6); }
+
+.potion-mix-row { display: flex; gap: 20px; align-items: center; }
+.potion-flask-btn {
+  padding: 8px 14px; border-radius: 14px; background: rgba(13, 18, 38, 0.9);
+  border: 1.5px solid var(--border-gold); color: #fff; font-size: 12px; cursor: pointer;
+}
+
+/* 任務圖鑑 */
+.quest-log-card { max-width: 820px; }
+.quest-summary-stat { font-size: 13px; color: var(--text-dim); margin: 6px 0 16px 0; }
+.quest-puzzles-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; max-height: 420px; overflow-y: auto; padding-right: 6px; }
+.quest-item-card {
+  background: rgba(6, 8, 20, 0.7); border: 1px solid var(--border-glow); border-radius: 14px; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between;
+}
+.quest-item-card.solved { border-color: var(--emerald-neon); background: rgba(16, 185, 129, 0.08); }
+.badge-solved { font-size: 11px; font-weight: 700; color: #34d399; background: rgba(16, 185, 129, 0.2); padding: 2px 8px; border-radius: 8px; }
+.badge-unsolved { font-size: 11px; color: var(--text-dim); background: rgba(255, 255, 255, 0.06); padding: 2px 8px; border-radius: 8px; }
+
+/* 按鈕與彈窗通規 */
+.btn-primary, .btn-primary-large {
+  background: linear-gradient(135deg, var(--cyan-neon) 0%, var(--purple-neon) 100%);
+  border: none; color: #fff; padding: 8px 18px; border-radius: 16px; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 0 14px var(--cyan-dim);
+}
+.btn-primary:hover, .btn-primary-large:hover { transform: translateY(-2px); box-shadow: 0 0 20px rgba(0, 240, 255, 0.5); }
+.btn-primary-large { padding: 10px 24px; font-size: 14px; }
+
+.btn-secondary {
+  background: rgba(13, 18, 38, 0.9); border: 1px solid var(--border-glow); color: var(--text-dim); padding: 6px 14px; border-radius: 14px; font-size: 11px; cursor: pointer;
+}
+.btn-secondary:hover { color: #fff; border-color: rgba(255, 255, 255, 0.3); }
+
+.modal-backdrop {
+  position: fixed; inset: 0; background: rgba(3, 5, 15, 0.88); backdrop-filter: blur(14px); z-index: 100; display: flex; align-items: center; justify-content: center; animation: fadeIn 0.3s ease;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.modal-card {
+  position: relative; background: var(--bg-panel-solid); border: 1.5px solid var(--border-glow); border-radius: 22px; padding: 24px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 40px var(--cyan-dim); animation: popUp 0.35s var(--ease-spring);
+}
+@keyframes popUp { from { transform: scale(0.88); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+.modal-close {
+  position: absolute; top: 16px; right: 16px; background: rgba(255, 255, 255, 0.1); border: none; color: #fff; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 15px;
+}
+.modal-close:hover { background: var(--crimson-neon); }
+
+.toast-box {
+  position: fixed; top: 75px; left: 50%; transform: translateX(-50%); z-index: 200; display: flex; flex-direction: column; gap: 8px; pointer-events: none;
+}
+.toast {
+  background: rgba(13, 18, 38, 0.95); border: 1.5px solid var(--cyan-neon); color: #fff; padding: 10px 22px; border-radius: 20px; font-size: 13px; font-weight: 600; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7), 0 0 20px var(--cyan-dim); animation: toastPop 0.3s var(--ease-spring), toastFade 0.3s forwards 2.7s;
+}
+@keyframes toastPop { from { opacity: 0; transform: translateY(-15px) scale(0.9); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes toastFade { from { opacity: 1; } to { opacity: 0; transform: translateY(-15px); } }
+
+.hidden { display: none !important; }
+
+/* 響應式適配 */
+@media (max-width: 860px) {
+  .companion-bonds-dock { display: none; }
+  .arrow-left { left: 4px; }
+  .arrow-right { right: 4px; }
+  .arrow-container { width: 48px; height: 72px; }
+  .character-sprite-layer { right: 2%; width: 250px; height: 360px; }
+  .dialogue-dock-container { width: 95%; }
+  .scene-quick-nav .nav-pill span { display: none; }
+  .quest-puzzles-grid, .save-slots-grid, .ending-companions-eval { grid-template-columns: 1fr; }
+}

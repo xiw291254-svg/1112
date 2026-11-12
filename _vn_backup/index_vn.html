@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>星海之境 · 迴光之誓 | 50重極限幾何解謎 × 四大夥伴戰友攻略</title>
+  <meta name="description" content="包含50重高難度幾何與邏輯謎題、四大夥伴感情攻略（戰友情vs分道揚鑣）、官方答案秘卷一鍵破解、劇情選擇存讀檔與命運時空回溯的旗艦級視覺小說。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800;900&family=Noto+Serif+TC:wght@400;600;900&family=Outfit:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="vn-body">
+  
+  <!-- 全局動態氛圍粒子畫布 -->
+  <div id="vn-particle-layer">
+    <canvas id="ambient-canvas"></canvas>
+    <div class="scene-vignette"></div>
+    <div class="scene-aurora aurora-1"></div>
+    <div class="scene-aurora aurora-2"></div>
+  </div>
+
+  <!-- 頂部 HUD 狀態列 -->
+  <header class="vn-header">
+    <div class="header-left">
+      <div class="vn-logo">
+        <span class="logo-crest">🜚</span>
+        <div class="logo-titles">
+          <span class="main-title">星海之境 · 迴光之誓</span>
+          <span class="sub-title">50 PUZZLE SANCTUARY · VISUAL NOVEL</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6 大場景切換指示條 -->
+    <div class="scene-quick-nav" id="scene-nav-pills">
+      <button class="nav-pill active" data-scene="0" title="星穹大圖書館">
+        <span class="pill-dot">✦</span> 圖書館
+      </button>
+      <button class="nav-pill" data-scene="1" title="月影琉璃溫室">
+        <span class="pill-dot">🌸</span> 溫室
+      </button>
+      <button class="nav-pill" data-scene="2" title="煉金時計塔">
+        <span class="pill-dot">🕰️</span> 時計塔
+      </button>
+      <button class="nav-pill" data-scene="3" title="星象觀測迴廊">
+        <span class="pill-dot">🌌</span> 觀測廊
+      </button>
+      <button class="nav-pill" data-scene="4" title="元素魔導工坊">
+        <span class="pill-dot">⚡</span> 工坊
+      </button>
+      <button class="nav-pill" data-scene="5" title="星辰聖壇世界樹">
+        <span class="pill-dot">🜚</span> 聖壇
+      </button>
+    </div>
+
+    <!-- 頂部功能快捷按鈕 -->
+    <div class="header-right">
+      <!-- 4 夥伴好感度快速看板 -->
+      <div class="companion-bonds-dock" id="bonds-summary-dock" title="四大夥伴戰友羈絆好感度">
+        <div class="bond-pill bond-luna"><span class="b-icon">🌙</span> <span id="bond-val-luna">50</span></div>
+        <div class="bond-pill bond-seris"><span class="b-icon">⚗️</span> <span id="bond-val-seris">50</span></div>
+        <div class="bond-pill bond-elena"><span class="b-icon">⚔️</span> <span id="bond-val-elena">50</span></div>
+        <div class="bond-pill bond-mira"><span class="b-icon">🗡️</span> <span id="bond-val-mira">50</span></div>
+      </div>
+
+      <!-- 右上角：50 謎題官方答案秘卷 (附一鍵破解) -->
+      <button class="hud-btn highlight-gold" id="btn-cheat-sheet" title="查看 50 重解謎官方答案秘卷與一鍵破解">
+        <span class="btn-icon">📜</span>
+        <span>答案秘卷</span>
+      </button>
+
+      <!-- 劇情存讀檔按鈕 -->
+      <button class="hud-btn" id="btn-save-load" title="存檔與讀檔 (S)">
+        <span class="btn-icon">💾</span>
+        <span>存讀檔</span>
+      </button>
+
+      <!-- 命運時空回溯按鈕 -->
+      <button class="hud-btn" id="btn-timeline" title="回溯至先前劇情章節 (T)">
+        <span class="btn-icon">⏳</span>
+        <span>時空回溯</span>
+      </button>
+
+      <!-- 50 謎題進度 -->
+      <button class="hud-btn" id="btn-quest-log" title="查看 50 謎題進度手札 (Q)">
+        <span class="btn-icon">🧩</span>
+        <span id="puzzle-score-text">0 / 50</span>
+      </button>
+
+      <button class="hud-btn" id="btn-backlog" title="對話歷史回顧 (L)">
+        <span class="btn-icon">📖</span>
+      </button>
+
+      <button class="hud-btn icon-only" id="btn-audio-toggle" title="開關音效與音樂 (M)">
+        <svg id="icon-sound-on" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+        <svg id="icon-sound-off" class="hidden" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- 主要視覺劇場視窗 (Scene Stage) -->
+  <main class="vn-stage" id="vn-stage">
+
+    <!-- 左側邊框三角形按鈕 (向左切換場景) -->
+    <div class="scene-nav-arrow arrow-left" id="btn-nav-prev" role="button" tabindex="0" aria-label="切換至左側場景">
+      <div class="arrow-container left-arrow-glow">
+        <svg class="arrow-svg" viewBox="0 0 100 120" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="vn-grad-left" x1="100%" y1="50%" x2="0%" y2="50%">
+              <stop offset="0%" stop-color="rgba(0, 240, 255, 0.2)"/>
+              <stop offset="60%" stop-color="rgba(0, 240, 255, 0.8)"/>
+              <stop offset="100%" stop-color="#00f0ff"/>
+            </linearGradient>
+            <filter id="vn-glow-l" x="-30%" y="-30%" width="160%" height="160%">
+              <feGaussianBlur stdDeviation="6" result="blur"/>
+              <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+            </filter>
+          </defs>
+          <polygon class="arrow-bg" points="90,12 18,60 90,108" />
+          <polygon class="arrow-border" points="90,12 18,60 90,108" />
+          <polygon class="arrow-core" points="75,32 35,60 75,88" />
+        </svg>
+        <div class="arrow-label"><span class="arrow-glyph">❮</span> <span class="arrow-text-dest" id="left-dest-name">星辰聖壇</span></div>
+        <div class="arrow-pulse"></div>
+      </div>
+    </div>
+
+    <!-- 右側邊框三角形按鈕 (向右切換場景) -->
+    <div class="scene-nav-arrow arrow-right" id="btn-nav-next" role="button" tabindex="0" aria-label="切換至右側場景">
+      <div class="arrow-container right-arrow-glow">
+        <svg class="arrow-svg" viewBox="0 0 100 120" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="vn-grad-right" x1="0%" y1="50%" x2="100%" y2="50%">
+              <stop offset="0%" stop-color="rgba(192, 132, 252, 0.2)"/>
+              <stop offset="60%" stop-color="rgba(192, 132, 252, 0.8)"/>
+              <stop offset="100%" stop-color="#c084fc"/>
+            </linearGradient>
+            <filter id="vn-glow-r" x="-30%" y="-30%" width="160%" height="160%">
+              <feGaussianBlur stdDeviation="6" result="blur"/>
+              <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+            </filter>
+          </defs>
+          <polygon class="arrow-bg" points="10,12 82,60 10,108" />
+          <polygon class="arrow-border" points="10,12 82,60 10,108" />
+          <polygon class="arrow-core" points="25,32 65,60 25,88" />
+        </svg>
+        <div class="arrow-label"><span class="arrow-text-dest" id="right-dest-name">月影溫室</span> <span class="arrow-glyph">❯</span></div>
+        <div class="arrow-pulse"></div>
+      </div>
+    </div>
+
+    <!-- 視覺藝術場景繪製層 (6 大場景) -->
+    <div class="scene-artwork-wrapper" id="scene-artwork-box">
+      
+      <!-- 場景 0：星穹圖書館 -->
+      <div class="scene-layer scene-library active" id="scene-view-0">
+        <div class="scene-bg-art library-art">
+          <div class="starlight-windows"></div>
+          <div class="celestial-arch"></div>
+          <div class="floating-books-cluster">
+            <span class="f-book b1">📖</span>
+            <span class="f-book b2">📜</span>
+            <span class="f-book b3">✨</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 場景 1：月影溫室 -->
+      <div class="scene-layer scene-garden" id="scene-view-1">
+        <div class="scene-bg-art garden-art">
+          <div class="glass-dome"></div>
+          <div class="crystal-fountain"></div>
+          <div class="bioluminescent-butterflies">
+            <span class="butterfly b-1">🦋</span>
+            <span class="butterfly b-2">🦋</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 場景 2：煉金時計塔 -->
+      <div class="scene-layer scene-clocktower" id="scene-view-2">
+        <div class="scene-bg-art clocktower-art">
+          <div class="brass-gears-set">
+            <div class="gear gear-large">⚙️</div>
+            <div class="gear gear-medium">⚙️</div>
+            <div class="gear gear-small">⚙️</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 場景 3：星象觀測迴廊 -->
+      <div class="scene-layer scene-observatory" id="scene-view-3">
+        <div class="scene-bg-art observatory-art">
+          <div class="telescope-silhouette">🔭</div>
+        </div>
+      </div>
+
+      <!-- 場景 4：元素魔導工坊 -->
+      <div class="scene-layer scene-foundry" id="scene-view-4">
+        <div class="scene-bg-art foundry-art">
+          <div class="magic-forge-glow">⚡</div>
+        </div>
+      </div>
+
+      <!-- 場景 5：星辰聖壇與世界樹 -->
+      <div class="scene-layer scene-shrine" id="scene-view-5">
+        <div class="scene-bg-art shrine-art">
+          <div class="world-tree-silhouette"></div>
+          <div class="shrine-aurora-sky"></div>
+          <div class="starlight-pillar"></div>
+        </div>
+      </div>
+
+      <!-- 互動解謎熱點層 -->
+      <div class="hotspots-overlay" id="hotspots-layer"></div>
+
+      <!-- 多角色動態立繪展示層 (4 夥伴動態切換) -->
+      <div class="character-sprite-layer" id="char-sprite-layer">
+        <div class="sprite-container sprite-luna" id="active-companion-sprite">
+          <div class="sprite-body-wrapper">
+            <div class="sprite-silhouette-glow" id="sprite-glow"></div>
+            <div class="sprite-avatar-visual">
+              <div class="anime-portrait-frame">
+                <div class="portrait-halo"></div>
+                <div class="portrait-hair" id="char-hair"></div>
+                <div class="portrait-eyes" id="char-eyes"></div>
+                <div class="portrait-expression" id="char-emotion-tag">溫柔微笑</div>
+                <div class="portrait-role-badge" id="char-role-badge">🌙 司祭露娜</div>
+              </div>
+            </div>
+          </div>
+          <div class="character-name-floating" id="char-name-floating">露娜 · LUNA</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 視覺小說 對話與選擇支介面 (Dialogue UI) -->
+    <div class="dialogue-dock-container" id="dialogue-dock">
+      <div class="choice-container" id="choice-container" style="display: none;"></div>
+
+      <div class="dialogue-box" id="dialogue-box">
+        <div class="dialogue-header">
+          <div class="speaker-tag" id="speaker-nameplate">
+            <span class="speaker-icon" id="speaker-icon">🌙</span>
+            <span class="speaker-title" id="speaker-name">露娜 (Luna)</span>
+          </div>
+          <div class="dialogue-controls-mini">
+            <!-- 流暢點擊快進/跳過按鈕 -->
+            <button class="btn-fast-forward" id="btn-skip-text" title="快進對話至下個選項">⏩ 快進</button>
+            <span class="text-speed-hint">點擊推進 ❯</span>
+          </div>
+        </div>
+
+        <div class="dialogue-content">
+          <p class="dialogue-text" id="dialogue-text-body"></p>
+        </div>
+
+        <div class="dialogue-footer">
+          <div class="dialogue-next-indicator" id="dialogue-next-arrow">▼</div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- 底部道具探索欄 (Inventory Dock) -->
+  <footer class="vn-footer">
+    <div class="inventory-dock-wrapper">
+      <div class="inv-badge">
+        <span class="inv-icon">🎒</span>
+        <span class="inv-txt">神殿聖物袋</span>
+      </div>
+      <div class="inv-slots-row" id="inv-slots-row">
+        <div class="inv-cell empty" data-slot="0"></div>
+        <div class="inv-cell empty" data-slot="1"></div>
+        <div class="inv-cell empty" data-slot="2"></div>
+        <div class="inv-cell empty" data-slot="3"></div>
+        <div class="inv-cell empty" data-slot="4"></div>
+        <div class="inv-cell empty" data-slot="5"></div>
+      </div>
+      <div class="inv-helper-text">點擊道具可放大 3D 檢視，或於機關中直接觸發共鳴</div>
+    </div>
+  </footer>
+
+  <!-- ================= 50 重解謎專用互動視窗 (Puzzle Modal) ================= -->
+  <div class="modal-backdrop" id="puzzle-modal" style="display: none;">
+    <div class="modal-card puzzle-modal-card">
+      <button class="modal-close" id="btn-close-puzzle">✕</button>
+      <div class="puzzle-modal-header">
+        <span class="puzzle-badge-icon" id="pm-icon">🧩</span>
+        <div>
+          <h2 id="pm-title">斐波那契天體星軌儀</h2>
+          <span class="pm-type-tag" id="pm-scene-tag">星穹大圖書館 · 深度幾何</span>
+        </div>
+      </div>
+      <p class="pm-description" id="pm-desc">請調整各項參數，解開古老的機關鎖定。</p>
+
+      <div class="puzzle-interactive-stage" id="pm-interactive-stage"></div>
+
+      <div class="puzzle-modal-footer">
+        <button class="btn-secondary" id="btn-puzzle-hint">💡 智者啟示</button>
+        <button class="btn-primary" id="btn-puzzle-verify">印證符印</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 右上角附贈：50 謎題官方答案秘卷視窗 (Cheat Sheet Modal) ================= -->
+  <div class="modal-backdrop" id="cheat-sheet-modal" style="display: none;">
+    <div class="modal-card cheat-sheet-card">
+      <button class="modal-close" id="btn-close-cheat">✕</button>
+      <div class="modal-header">
+        <span class="header-icon">📜</span>
+        <div>
+          <h2>神殿官方 50 重解謎答案秘卷</h2>
+          <p style="font-size: 12px; color: var(--text-dim);">包含全境 50 重高難度幾何與邏輯謎題完整解答及【⚡ 一鍵破解】功能</p>
+        </div>
+      </div>
+      <div class="cheat-sheet-list" id="cheat-sheet-list">
+        <!-- JS 動態生成 50 個詳細解答卡片 -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 劇情存檔與讀檔管理器 (Save & Load Modal) ================= -->
+  <div class="modal-backdrop" id="save-load-modal" style="display: none;">
+    <div class="modal-card save-load-card">
+      <button class="modal-close" id="btn-close-save-load">✕</button>
+      <div class="modal-header">
+        <span class="header-icon">💾</span>
+        <h2>時空印記 · 劇情存檔與讀檔管理</h2>
+      </div>
+      <p style="font-size: 12px; color: var(--text-dim); margin-bottom: 8px;">存檔將精確記錄您當前的劇情對話進度、選項分支、50 謎題解鎖狀態與四大夥伴好感度。</p>
+      <div class="save-slots-grid" id="save-slots-grid"></div>
+    </div>
+  </div>
+
+  <!-- ================= 命運時空回溯視窗 (Timeline Rewind Modal) ================= -->
+  <div class="modal-backdrop" id="timeline-modal" style="display: none;">
+    <div class="modal-card timeline-card">
+      <button class="modal-close" id="btn-close-timeline">✕</button>
+      <div class="modal-header">
+        <span class="header-icon">⏳</span>
+        <h2>命運分支 · 時空回溯星軌</h2>
+      </div>
+      <p style="font-size: 12px; color: var(--text-dim); margin-bottom: 14px;">點擊任意章節節點可立即跳轉回溯，嘗試不同的夥伴好感對話與分歧結局！</p>
+      <div class="timeline-nodes-list" id="timeline-nodes-list"></div>
+    </div>
+  </div>
+
+  <!-- 50 謎題任務進度手札 (Quest Log Modal) -->
+  <div class="modal-backdrop" id="quest-log-modal" style="display: none;">
+    <div class="modal-card quest-log-card">
+      <button class="modal-close" id="btn-close-quest">✕</button>
+      <div class="modal-header">
+        <span class="header-icon">🧩</span>
+        <h2>星海迴廊 · 50 重幾何解謎圖鑑</h2>
+      </div>
+      <div class="quest-summary-stat">
+        當前進度：<strong id="quest-modal-score">0 / 50</strong> (<span id="quest-modal-percent">0%</span>)
+      </div>
+      <div class="quest-puzzles-grid" id="quest-puzzles-grid"></div>
+    </div>
+  </div>
+
+  <!-- 對話歷史履歷彈窗 (Backlog Modal) -->
+  <div class="modal-backdrop" id="backlog-modal" style="display: none;">
+    <div class="modal-card backlog-card">
+      <button class="modal-close" id="btn-close-backlog">✕</button>
+      <div class="modal-header">
+        <span class="header-icon">📖</span>
+        <h2>對話回顧 · 記憶之頁</h2>
+      </div>
+      <div class="backlog-scroll-area" id="backlog-content-list"></div>
+    </div>
+  </div>
+
+  <!-- 道具 3D 檢視彈窗 -->
+  <div class="modal-backdrop" id="item-modal" style="display: none;">
+    <div class="modal-card item-inspect-card">
+      <button class="modal-close" id="btn-close-item">✕</button>
+      <div class="item-inspect-body">
+        <div class="item-visual-orb">
+          <div class="orb-icon" id="inspect-icon">💎</div>
+        </div>
+        <div class="item-meta">
+          <h3 id="inspect-title">星光稜鏡</h3>
+          <span class="item-type-badge" id="inspect-type">光學法器</span>
+          <p class="item-desc" id="inspect-desc"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 終章盛典 (Ending Screen - 戰友情 vs 分道揚鑣) -->
+  <div class="modal-backdrop" id="ending-modal" style="display: none;">
+    <div class="modal-card ending-card">
+      <div class="ending-crest" id="ending-crest">🜚</div>
+      <h1 class="ending-title" id="ending-title">TRUE END · 戰友誓約</h1>
+      <p class="ending-desc" id="ending-desc">
+        全體夥伴與你的羈絆超越了時空的界限，四大守護意志化為不滅戰旗！
+      </p>
+      
+      <!-- 4 夥伴最終結局評價面板 -->
+      <div class="ending-companions-eval" id="ending-companions-eval"></div>
+
+      <button class="btn-primary-large" id="btn-restart-game">重新開啟旅程</button>
+    </div>
+  </div>
+
+  <!-- Toast 提示 -->
+  <div class="toast-box" id="toast-box"></div>
+
+  <!-- 腳本引入 -->
+  <script src="audio.js"></script>
+  <script src="vn_data.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>

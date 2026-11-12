@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>數位科技概論（上）隨堂測驗卷 - 錯題精析、弱點特訓與全真刷題系統</title>
+  <meta name="description" content="針對《數位科技概論（上）隨堂測驗卷》第3回「系統平台的組成架構－硬體」之考卷深度錯題剖析、盲點診斷、正解詳析、錯題變形特訓與全真刷題互動系統。">
+  
+  <!-- Google Fonts 現代高質感字型 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;900&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- 主樣式表 -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- 頂部導覽列 -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <div class="nav-brand">
+        <span class="brand-icon">🎓</span>
+        <span class="brand-text">數位科技概論 · 錯題精析與刷題系統</span>
+      </div>
+
+      <nav class="nav-links">
+        <a href="#wrong-analysis" class="nav-link">🚨 錯題深度剖析</a>
+        <a href="#paper-inspector" class="nav-link">🖼️ 實體考卷對照</a>
+        <a href="#all-questions" class="nav-link">📋 全卷13題目錄</a>
+        <a href="#drill-center" class="nav-link nav-highlight">🚀 刷題與測驗中心</a>
+        <a href="#cheatsheet" class="nav-link">📚 考前速記寶典</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button type="button" class="btn-icon" id="sound-toggle-btn" title="切換答題音效">🔊 音效：開</button>
+        <button type="button" class="btn-icon" id="theme-toggle-btn" title="切換深淺色外觀">
+          <span id="theme-icon">🌙</span> 外觀
+        </button>
+        <button type="button" class="btn btn-primary btn-sm" onclick="window.print()" title="列印或另存為PDF訂正聯">🖨️ 列印訂正單</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 主體內容 -->
+  <main>
+    <!-- 卷頭與學生成績資訊區 -->
+    <section class="hero-section">
+      <div class="container" id="exam-meta-container">
+        <!-- 由 app.js 動態渲染 -->
+      </div>
+    </section>
+
+    <!-- 1. 三大錯題深度剖析專區 -->
+    <section class="wrong-section" id="wrong-analysis">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">🚨 三大錯題深度剖析與盲點雷達</h2>
+            <p class="section-desc">本頁共 13 題，學生答錯第 9、12、13 題（共扣 12 分）。以下針對錯誤成因、認知盲點與破題關鍵進行深度剖析：</p>
+          </div>
+          <a href="#drill-center" class="btn btn-danger btn-sm">🎯 馬上進入錯題強化特訓 ➔</a>
+        </div>
+
+        <div id="wrong-questions-list">
+          <!-- 由 app.js 動態渲染三大錯題卡片 -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. 實體考卷互動對照模式 -->
+    <section class="inspector-section" id="paper-inspector">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">🖼️ 實體試卷互動對照模式 (Original Paper Inspector)</h2>
+            <p class="section-desc">直接點擊試卷影像上的紅色框選熱點（Q9、Q12、Q13），即可快速錨定該題的完整詳解與診斷！</p>
+          </div>
+          <button type="button" class="btn btn-outline btn-sm" id="view-full-paper-modal-btn">🔍 檢視全卷超高解析原圖</button>
+        </div>
+
+        <div class="paper-viewer-layout">
+          <!-- 左欄：可互動之試卷圖片 -->
+          <div class="paper-viewer-col">
+            <div class="paper-interactive-wrap">
+              <img src="2772.jpg" alt="考卷原始掃描圖" class="paper-main-img" id="paper-image">
+              
+              <!-- 熱點標記：Q9 -->
+              <div class="paper-hotspot hotspot-q9" data-qid="9" title="點擊跳轉至 第 9 題錯題剖析">
+                <span class="hotspot-label">❌ 錯題 9（學生選D / 正解C）</span>
+              </div>
+
+              <!-- 熱點標記：Q12 -->
+              <div class="paper-hotspot hotspot-q12" data-qid="12" title="點擊跳轉至 第 12 題錯題剖析">
+                <span class="hotspot-label">❌ 錯題 12（學生選A / 正解D）</span>
+              </div>
+
+              <!-- 熱點標記：Q13 -->
+              <div class="paper-hotspot hotspot-q13" data-qid="13" title="點擊跳轉至 第 13 題錯題剖析">
+                <span class="hotspot-label">❌ 錯題 13（學生選A / 正解D）</span>
+              </div>
+            </div>
+
+            <div class="paper-controls">
+              <small class="text-muted">💡 提示：點擊上方紅框區域，頁面將平滑滾動並高亮該題！</small>
+            </div>
+          </div>
+
+          <!-- 右欄：考卷解讀指引卡 -->
+          <div class="inspector-guide-col">
+            <div class="inspector-guide-card">
+              <h3 style="margin-bottom: 1rem; font-size: 1.25rem;">📝 試卷批改現況與核心弱點速覽</h3>
+              
+              <div class="guide-step-item">
+                <div class="step-num">1</div>
+                <div>
+                  <strong>第 9 題：運算單元縮寫混淆（扣 4 分）</strong>
+                  <p class="text-muted">題目明確要求「運算工作（計算、比對、配對）」，學生填答 <strong>(D) OU（輸出單元）</strong>。老師在考卷上親手紅筆標註 <code>CU=控制</code>、<code>MU=記憶</code>、<code>OU=輸出</code>，正解為 <strong>(C) ALU（算術邏輯單元）</strong>。</p>
+                </div>
+              </div>
+
+              <div class="guide-step-item">
+                <div class="step-num">2</div>
+                <div>
+                  <strong>第 12 題：8GB 與 64 位元規格混淆（扣 4 分）</strong>
+                  <p class="text-muted">學生誤將「8GB RAM」理解為快取記憶體，選了 <strong>(A)</strong>。事實上「64位元電腦」的本質是 CPU 內部的<strong>「一般用途暫存器（GPR）位元寬度（Word Size）」</strong>，正解為 <strong>(D)</strong>。</p>
+                </div>
+              </div>
+
+              <div class="guide-step-item">
+                <div class="step-num">3</div>
+                <div>
+                  <strong>第 13 題：效能瓶頸評估與審題倒置（扣 4 分）</strong>
+                  <p class="text-muted">題目詢問「<u>最不可能</u>優先更換以提升效能」的元件，學生雖有在試卷劃底線，卻誤選了 <strong>(A) CPU</strong>。事實上 CPU 是效能心臟，而 <strong>(D) 鍵盤</strong> 純屬輸入外設，對運算效能毫無任何影響，正解為 <strong>(D)</strong>。</p>
+                </div>
+              </div>
+
+              <div style="margin-top: 1.5rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                <button type="button" class="btn btn-primary btn-sm" onclick="scrollToQuestion(9)">查看第 9 題詳解</button>
+                <button type="button" class="btn btn-primary btn-sm" onclick="scrollToQuestion(12)">查看第 12 題詳解</button>
+                <button type="button" class="btn btn-primary btn-sm" onclick="scrollToQuestion(13)">查看第 13 題詳解</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. 全卷 13 題完整目錄與詳解 -->
+    <section class="all-questions-section" id="all-questions">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">📋 第 1 頁全卷 13 題題庫與名師逐題詳解</h2>
+            <p class="section-desc">包含第 1~13 題完整題幹、ABCD 選項、學生填答對比、考點歸納與常考陷阱提示：</p>
+          </div>
+          <div style="display: flex; gap: 0.5rem;">
+            <button type="button" class="btn btn-outline btn-sm" id="expand-all-btn">全部展開 ▾</button>
+            <button type="button" class="btn btn-outline btn-sm" id="collapse-all-btn">全部收合 ▴</button>
+          </div>
+        </div>
+
+        <!-- 篩選工具列 -->
+        <div class="filter-toolbar">
+          <div class="filter-row">
+            <div class="btn-group">
+              <span style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted); margin-right: 0.3rem;">作答狀態：</span>
+              <button type="button" class="btn-filter filter-btn active" data-filter="all">全部 (13 題)</button>
+              <button type="button" class="btn-filter filter-btn" data-filter="wrong">🚨 僅看錯題 (3 題)</button>
+              <button type="button" class="btn-filter filter-btn" data-filter="correct">✅ 僅看答對 (10 題)</button>
+            </div>
+
+            <div class="search-input-wrap">
+              <input type="text" id="search-question-input" class="search-input" placeholder="🔍 搜尋題目、選項或考點（如：SRAM、ALU）...">
+            </div>
+          </div>
+
+          <div class="filter-row">
+            <div class="btn-group">
+              <span style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted); margin-right: 0.3rem;">考點分類：</span>
+              <button type="button" class="btn-filter cat-btn active" data-category="all">全部分類</button>
+              <button type="button" class="btn-filter cat-btn" data-category="五大單元">五大單元架構</button>
+              <button type="button" class="btn-filter cat-btn" data-category="CPU架構">CPU 與暫存器規格</button>
+              <button type="button" class="btn-filter cat-btn" data-category="記憶體階層">記憶體階層 (RAM/SRAM/DRAM)</button>
+              <button type="button" class="btn-filter cat-btn" data-category="周邊介面">I/O 與周邊介面</button>
+            </div>
+            <div id="question-count-badge" style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted);">顯示 13 題</div>
+          </div>
+        </div>
+
+        <!-- 題目清單容器 -->
+        <div id="all-questions-list">
+          <!-- 由 app.js 動態生成 -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. 🚀 核心升級：刷題與複習練習中心 (Practice & Drill Center) -->
+    <section class="drill-section" id="drill-center">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">🚀 刷題與複習練習中心 (Practice & Drill Center)</h2>
+            <p class="section-desc">三大專業刷題模式：錯題變形強化訓練、單題卡片沉浸刷題、以及全真 15 分鐘計時大考！</p>
+          </div>
+        </div>
+
+        <!-- 三大模式導覽標籤列 -->
+        <div class="drill-mode-nav-tabs">
+          <button type="button" class="drill-tab-btn tab-mistake active" data-tab="pane-mistake">
+            <span>🎯</span> 模式一：錯題與變形題強化特訓 (9題)
+          </button>
+          <button type="button" class="drill-tab-btn tab-card" data-tab="pane-flashcard">
+            <span>⚡</span> 模式二：逐題沉浸刷題 (鍵盤快捷鍵 A/B/C/D)
+          </button>
+          <button type="button" class="drill-tab-btn" data-tab="pane-mock">
+            <span>⏱️</span> 模式三：全真模擬計時大考 (15分鐘+答題卡)
+          </button>
+        </div>
+
+        <!-- ==============================================
+             標籤頁一：錯題與變形題強化特訓營
+             ============================================== -->
+        <div class="drill-tab-pane active" id="pane-mistake">
+          <div class="mistake-camp-header">
+            <div>
+              <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--danger); margin-bottom: 0.25rem;">
+                🔥 錯題弱點突破特訓營（3 題原卷錯題 ＋ 6 題概念變形題）
+              </h3>
+              <p class="text-muted" style="font-size: 0.9rem;">
+                透過「原題重做」配合「同類題型變形挑戰」，徹底擺脫死記硬背，真正把運算單元、64位元規格與效能瓶頸徹底弄懂！
+              </p>
+            </div>
+
+            <div class="mastery-stats-box">
+              <div>
+                <div id="mastery-progress-label" style="font-size: 0.85rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.25rem;">
+                  弱點攻克掌握度：0 / 9 題 (0%)
+                </div>
+                <div class="mastery-progress-bar-wrap">
+                  <div class="mastery-progress-bar-fill" id="mastery-progress-fill"></div>
+                </div>
+              </div>
+              <button type="button" class="btn btn-outline btn-sm" id="mistake-reset-btn">🔄 清空重新挑戰</button>
+            </div>
+          </div>
+
+          <!-- 特訓篩選鈕 -->
+          <div style="display: flex; gap: 0.5rem; margin-bottom: 1.25rem; flex-wrap: wrap;">
+            <button type="button" class="btn-filter mistake-filter-btn active" data-filter="all">全部特訓題 (9 題)</button>
+            <button type="button" class="btn-filter mistake-filter-btn" data-filter="orig">🚨 僅原考卷錯題 (3 題)</button>
+            <button type="button" class="btn-filter mistake-filter-btn" data-filter="variants">🔥 僅觀念變形題 (6 題)</button>
+          </div>
+
+          <!-- 題目列表 -->
+          <div id="mistake-questions-list">
+            <!-- 由 app.js 動態渲染 -->
+          </div>
+        </div>
+
+        <!-- ==============================================
+             標籤頁二：逐題沉浸刷題 (Card Flashcard Drill)
+             ============================================== -->
+        <div class="drill-tab-pane" id="pane-flashcard">
+          <div class="flashcard-container">
+            <!-- 頂部進度與控制條 -->
+            <div class="flashcard-header-bar">
+              <div style="display: flex; align-items: center; gap: 0.75rem;">
+                <span class="flashcard-progress-text" id="flashcard-prog-num">第 1 / 13 題</span>
+                <span class="flashcard-accuracy" id="flashcard-acc-rate">尚未作答</span>
+              </div>
+
+              <div style="display: flex; gap: 0.5rem;">
+                <button type="button" class="btn btn-outline btn-sm" id="flashcard-shuffle-btn">➡️ 循序題序：正常</button>
+                <button type="button" class="btn btn-outline btn-sm" id="flashcard-reset-btn">🔄 重新刷題</button>
+              </div>
+            </div>
+
+            <!-- 單題沉浸式大卡片渲染區 -->
+            <div id="flashcard-render-area">
+              <!-- 由 app.js 動態渲染 -->
+            </div>
+
+            <!-- 底部上一題 / 下一題控制 -->
+            <div class="flashcard-controls">
+              <button type="button" class="btn btn-outline btn-sm" id="flashcard-prev-btn">⬅ 上一題 (方向鍵 Left)</button>
+              
+              <div class="keyboard-hints-pill">
+                <span>⌨️ 快捷鍵：</span>
+                <kbd>A</kbd> <kbd>B</kbd> <kbd>C</kbd> <kbd>D</kbd> 作答 · <kbd>←</kbd> <kbd>→</kbd> 切題
+              </div>
+
+              <button type="button" class="btn btn-primary btn-sm" id="flashcard-next-btn">下一題 ➔ (方向鍵 Right)</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==============================================
+             標籤頁三：全真模擬計時大考 (Timed Mock Exam)
+             ============================================== -->
+        <div class="drill-tab-pane" id="pane-mock">
+          <!-- 大考抬頭與計時器 -->
+          <div class="mock-exam-header-bar">
+            <div>
+              <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--text-main);">
+                ⏱️ 全真模擬計時大考（13 題高真模擬）
+              </h3>
+              <p class="text-muted" style="font-size: 0.85rem;">
+                限時 15 分鐘，右側附有即時答題卡，可隨時標記不確定題目（Flag），點選題號直達！
+              </p>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+              <div class="timer-box" id="mock-timer-box">
+                <span style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted);">剩餘時間：</span>
+                <span class="timer-clock" id="mock-timer-clock">15:00</span>
+              </div>
+              <button type="button" class="btn btn-outline btn-sm" id="mock-timer-toggle-btn">⏸️ 暫停計時</button>
+              <button type="button" class="btn btn-primary btn-sm" id="mock-exam-submit-btn">🚀 正式交卷算分</button>
+            </div>
+          </div>
+
+          <!-- 結算成績看板 (預設隱藏) -->
+          <div id="mock-exam-result-banner" class="quiz-result-banner" style="display: none;"></div>
+
+          <!-- 大考雙欄版面：左題目，右答題卡 -->
+          <div class="mock-exam-layout">
+            <!-- 左欄：大考試題列表 -->
+            <div id="mock-exam-questions-list">
+              <!-- 由 app.js 動態渲染 -->
+            </div>
+
+            <!-- 右欄：懸浮答題卡 -->
+            <div class="mock-exam-sidebar">
+              <div class="bubble-sheet-card">
+                <div class="bubble-sheet-title">
+                  <span>📋 快速答題卡</span>
+                  <span id="mock-answered-count" style="font-size: 0.85rem; color: var(--primary);">0 / 13</span>
+                </div>
+
+                <div class="bubble-grid" id="mock-bubble-grid">
+                  <!-- 由 app.js 動態生成題號圓鈕 -->
+                </div>
+
+                <div class="bubble-legend">
+                  <span><span class="legend-dot unanswered"></span>未答</span>
+                  <span><span class="legend-dot answered"></span>已答</span>
+                  <span><span class="legend-dot flagged"></span>標記待查</span>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                  <label style="font-size: 0.82rem; color: var(--text-sub); display: flex; align-items: center; gap: 0.4rem; cursor: pointer;">
+                    <input type="checkbox" id="mock-shuffle-options-check">
+                    <span>🔀 選項隨機打亂 (防死記 ABCD)</span>
+                  </label>
+                  <button type="button" class="btn btn-outline btn-sm" id="mock-exam-reset-btn" style="width: 100%;">🔄 重置試卷重新計時</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. 考前重點速記寶典 -->
+    <section class="cheatsheet-section" id="cheatsheet">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">📚 考前高頻重點速記寶典 (Knowledge Cheat Sheet)</h2>
+            <p class="section-desc">歸納第 3 章硬體架構核心常考圖表，考前 5 分鐘速讀神助攻：</p>
+          </div>
+        </div>
+
+        <div class="cheat-cards-grid">
+          <!-- 卡片 1: 五大單元 -->
+          <div class="cheat-card">
+            <div class="cheat-card-header">
+              <span>🏛️</span>
+              <h3>范紐曼五大單元對照表</h3>
+            </div>
+            <div class="cheat-card-body">
+              <table class="concept-table">
+                <thead>
+                  <tr><th>縮寫</th><th>全名</th><th>考題關鍵字</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td><strong>ALU</strong></td><td>Arithmetic Logic Unit</td><td><strong>計算、加減乘除、比對、邏輯判斷</strong></td></tr>
+                  <tr><td><strong>CU</strong></td><td>Control Unit</td><td><strong>解碼指令、協調指揮、發送信號（如船長、交警）</strong></td></tr>
+                  <tr><td><strong>MU</strong></td><td>Memory Unit</td><td><strong>存放程式、儲存資料與運算結果</strong></td></tr>
+                  <tr><td><strong>IU</strong></td><td>Input Unit</td><td><strong>輸入資料（鍵盤、滑鼠、掃描器）</strong></td></tr>
+                  <tr><td><strong>OU</strong></td><td>Output Unit</td><td><strong>輸出結果（螢幕、印表機、喇叭）</strong></td></tr>
+                </tbody>
+              </table>
+              <p style="margin-top: 0.6rem; font-size: 0.85rem; color: var(--primary);"><strong>公式記牢：</strong> CPU ＝ 控制單元 (CU) ＋ 算術邏輯單元 (ALU) ＋ 暫存器 (Registers)。</p>
+            </div>
+          </div>
+
+          <!-- 卡片 2: SRAM vs DRAM -->
+          <div class="cheat-card">
+            <div class="cheat-card-header">
+              <span>⚡</span>
+              <h3>SRAM 與 DRAM 終極對決</h3>
+            </div>
+            <div class="cheat-card-body">
+              <table class="concept-table">
+                <thead>
+                  <tr><th>比較項目</th><th>SRAM (靜態)</th><th>DRAM (動態)</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td><strong>組成元件</strong></td><td>正反器 (電晶體 4~6 顆)</td><td>1 顆電晶體 ＋ 1 顆電容</td></tr>
+                  <tr><td><strong>存取速度</strong></td><td><strong style="color:var(--success);">極快 (數奈秒)</strong></td><td>較慢 (數十奈秒)</td></tr>
+                  <tr><td><strong>需要充電(Refresh)?</strong></td><td><strong style="color:var(--success);">否 (No Refresh)</strong></td><td><strong style="color:var(--danger);">是 (需週期充電更新)</strong></td></tr>
+                  <tr><td><strong>每單位成本</strong></td><td>昂貴</td><td>低廉</td></tr>
+                  <tr><td><strong>應用領域</strong></td><td><strong>快取記憶體 (Cache)</strong></td><td><strong>主記憶體 (RAM)</strong></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- 卡片 3: 記憶體階層金字塔 -->
+          <div class="cheat-card">
+            <div class="cheat-card-header">
+              <span>🔺</span>
+              <h3>電腦記憶體階層架構金字塔</h3>
+            </div>
+            <div class="cheat-card-body">
+              <p>由頂至底，速度由快變慢、單位成本由貴變便宜、容量由小變大：</p>
+              
+              <div class="pyramid-box">
+                <div class="pyramid-tier tier-1">暫存器 (Registers) · 速度最快 / 位於 CPU 內</div>
+                <div class="pyramid-tier tier-2">快取記憶體 (Cache / SRAM) · MB 級</div>
+                <div class="pyramid-tier tier-3">主記憶體 (Main Memory / DRAM) · 8GB ~ 64GB</div>
+                <div class="pyramid-tier tier-4">輔助記憶體 (SSD / HDD) · 容量最大 / 斷電資料不消失</div>
+              </div>
+
+              <div class="pyramid-legend">
+                <span>▲ 速度最快 / 成本最高 / 容量最小</span>
+                <span>▼ 容量最大 / 成本最低 / 速度最慢</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 卡片 4: 電腦規格與效能指標 -->
+          <div class="cheat-card">
+            <div class="cheat-card-header">
+              <span>⚙️</span>
+              <h3>電腦規格與指標大考重點</h3>
+            </div>
+            <div class="cheat-card-body">
+              <ul style="padding-left: 1.25rem; font-size: 0.9rem; color: var(--text-sub);">
+                <li><strong>64 位元電腦</strong>：代表 CPU 的<strong>字組大小（Word Size）</strong>為 64 位元，即其內部<strong>一般用途暫存器</strong>能存放 64 位元長度資料，且內部資料匯流排寬度為 64-bit。</li>
+                <li><strong>MIPS</strong>：Million Instructions Per Second，每秒鐘執行的百萬條指令數（I 代表 <strong>Instruction</strong>）。</li>
+                <li><strong>FLOPS</strong>：Floating-point Operations Per Second，每秒浮點數運算次數（評估科學計算與 GPU 效能）。</li>
+                <li><strong>時脈頻率 (Clock Speed)</strong>：單位為 GHz（十億赫茲，1 GHz = 10^9 Hz），代表 CPU 內部每秒鐘振盪時鐘週期數。</li>
+                <li><strong>熱插拔 (Hot Swapping)</strong>：開機與關機狀態下皆可安全插拔硬體周邊（如 USB）。</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 頁尾 -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-info">
+        <p><strong>《數位科技概論（上）隨堂測驗卷》錯題精析、弱點特訓與全真刷題系統</strong></p>
+        <p>對應版本：旗立資訊 · 教用版書號：C221A3-X1 · 範圍：第3章 系統平台的組成架構－硬體</p>
+      </div>
+      <div class="footer-actions">
+        <button type="button" class="btn btn-outline btn-sm" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">⬆️ 回到頂部</button>
+        <button type="button" class="btn btn-primary btn-sm" onclick="window.print()">🖨️ 列印訂正聯 (A4排版)</button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 題庫資料與核心腳本 -->
+  <script src="exam_data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
